@@ -1,15 +1,15 @@
 <template>
-  <q-page class="column q-pa-md">
+  <q-page class="q-pa-md">
     <q-file
       v-model="file"
       label="Pick one file"
       filled
       style="max-width: 300px"
       accept="video/*"
+      class="q-mb-sm"
     />
-
-    {{ loading }}
-    {{ file }}
+    <q-btn color="primary" icon="upload" label="Upload" @click="getFiles" />
+    {{ ready }}
   </q-page>
 </template>
 
@@ -20,20 +20,27 @@ import { createFFmpeg } from '@ffmpeg/ffmpeg';
 export default {
   setup() {
     const file = ref<FileList>();
-    const loading = ref(true);
+    const ready = ref(false);
 
-    const ffmpeg = createFFmpeg({ log: true });
+    const ffmpeg = createFFmpeg({
+      log: true,
+    });
 
-    const load = async () => {
+    async function load() {
       await ffmpeg.load();
-      loading.value = false;
-    };
+      ready.value = true;
+    }
 
     load();
 
+    const getFiles = () => {
+      console.log(file.value);
+    };
+
     return {
       file,
-      loading,
+      ready,
+      getFiles,
     };
   },
 };
