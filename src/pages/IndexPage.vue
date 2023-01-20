@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-md flex column flex-center q-gutter-lg">
     <div v-if="!ready">Loading....</div>
 
     <div v-if="ready">
@@ -9,8 +9,9 @@
         v-model="file"
         label="Pick one file"
         filled
-        style="max-width: 300px"
+        style="max-width: 800px"
         class="q-mb-sm"
+        accept="video/*"
       />
       <q-btn
         color="primary"
@@ -20,6 +21,15 @@
       />
 
       <q-video :src="url" style="max-width: 300px" />
+
+      <div class="text-h5">GIF:</div>
+
+      <q-img
+        :src="gifURL"
+        :ratio="16 / 9"
+        spinner-color="primary"
+        spinner-size="82px"
+      />
     </div>
   </q-page>
 </template>
@@ -33,6 +43,7 @@ export default {
     const file = ref<File>();
     const ready = ref(false);
     const url = ref('');
+    const gifURL = ref('');
 
     const ffmpeg = createFFmpeg({
       log: true,
@@ -66,11 +77,11 @@ export default {
         new Blob([data.buffer], { type: 'image/gif' })
       );
 
-      console.log(url);
+      gifURL.value = url;
 
       const link: HTMLAnchorElement = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', 'out.gif');
+      link.setAttribute('download', `${vid.name}.gif`);
       link.click();
     };
 
@@ -85,6 +96,7 @@ export default {
       ready,
       getFiles,
       url,
+      gifURL,
     };
   },
 };
