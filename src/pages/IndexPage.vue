@@ -59,6 +59,19 @@ export default {
         'gif',
         'out.gif'
       );
+
+      const data = ffmpeg.FS('readFile', 'out.gif');
+
+      const url = URL.createObjectURL(
+        new Blob([data.buffer], { type: 'image/gif' })
+      );
+
+      console.log(url);
+
+      const link: HTMLAnchorElement = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'out.gif');
+      link.click();
     };
 
     const getFiles = (fileName: File) => {
