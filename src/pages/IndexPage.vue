@@ -81,7 +81,7 @@ export default {
 
       const link: HTMLAnchorElement = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', `${vid.name}.gif`);
+      link.setAttribute('download', `${vid.name.split('.')[0]}.gif`);
       link.click();
     };
 
